@@ -3,6 +3,8 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+let mysql = require('mysql');
+let fs = require("fs")
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -41,5 +43,51 @@ app.use(function(err, req, res, next) {
   res.status(err.status || 500);
   res.render('error');
 });
+
+
+function readAndCreate(fileName) {
+  let dataArr = [];
+  const data = fs.readFileSync(`./DB/${fileName}.json`, {encoding:'utf8', flag:'r'});
+  let myData = JSON.parse(data)
+      for (let i = 0; i < myData.fields.length; i++) {
+        let rand = Math.floor(Math.random()* 500)
+         dataArr.push(
+          {
+            name: myData.fields[i].companyName,
+            id: i,
+            Quantity: rand,
+            price: Math.floor(Math.random()* 1000),
+            free_stoks: rand,
+            is_exist: 1,
+            }
+          )
+      }
+    return dataArr;
+}
+
+let con = mysql.createConnection({
+  host: "localhost",
+  user: "root",
+  password: "z10mz10m",
+  database: "bursa"
+});
+
+async function insertManeger() {
+  let sqlCommand;
+  let data =  await readAndCreate("JSON");
+  console.log("data:", data);
+  console.log("data.length:", data.length);
+  for (let i = 0; i < data.length; i++) {
+    sqlCommand = `INSERT INTO stokes (id, stoke_name, Quantity, stoke_price, stoke_available, is_exist) 
+    VALUES ( ${data[i].id}, '${data[i].name}', ${data[i].Quantity}, 
+    ${data[i].price}, ${data[i].free_stoks}, ${data[i].is_exist})`
+    con.query(sqlCommand, function (err, result) {
+        if (err) console.log(err);
+    });
+  }
+}
+// insertManeger()
+
+
 
 module.exports = app;
