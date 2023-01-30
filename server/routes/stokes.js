@@ -14,6 +14,19 @@ router.get('/main', function (req, res) {
     })
 });
 
+router.get('/main/stoke/:id', function (req, res) {
+    console.log("req.params.id:", req.params.id);
+    let sql = `SELECT * FROM stokes
+    WHERE id=${req.params.id}`
+    con.query(sql, function (err, result) {
+        if (err){
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+});
+
 
 module.exports = router;
 

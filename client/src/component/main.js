@@ -1,9 +1,14 @@
-import React, { useEffect, useState } from "react";
-import { Link } from 'react-router-dom'
+import React, { useEffect, useState,  useContext} from "react";
+import { Link } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import {stokeIdContext} from "./stokeNameContext";
 
 
 function Main() {
+    const navigate = useNavigate();
     const [stokesArr, setStokesArr] = useState([])
+    const stokeNumId = useContext(stokeIdContext);
+
     useEffect(() => {
         fetch(`http://localhost:8080/spark/main`)
             .then((response) => response.json())
@@ -11,6 +16,13 @@ function Main() {
                 setStokesArr(data)
             })
     }, [])
+
+    function moveToStoke(index) {
+        // console.log("stokesArr[index]:", stokesArr[index]);
+        stokeNumId.changeId(stokesArr[index].id)
+        navigate("/bursa/main/stoke");
+    }
+
     return (
         <div>
             <header>
@@ -22,15 +34,10 @@ function Main() {
                     <li><Link className='btn' to="/bursa/main/portfolio">Personal trading portfolio</Link> </li>
                 </ul>
             </nav>
-            {console.log(stokesArr)}
             <div>
                 {stokesArr.map((item, index) => {
                     return <ul key={index}>
-                        <li>
-                        {console.log("hhhhhhhhhhhi")}
-                        {console.log(item.stoke_name)}
-                        {console.log(item.Quantity)}
-                        {console.log(item.stoke_available)}
+                        <li onClick={() => moveToStoke(index)}>
                             {item.stoke_name}
                             Full Quantity - {item.Quantity}
                             Quantity available - {item.stoke_available}
