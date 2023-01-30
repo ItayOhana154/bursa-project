@@ -3,18 +3,18 @@ var router = express.Router();
 var con = require('../connection');
 
 /* GET users listing. */
-router.get('/', function (req, res, next) {
-  let sql = `SELECT *  FROM stokes`
-  con.query(sql, function (err, result) {
-    if (err) throw err;
-    else {
-      res.send(result)
-    }
-  })
-});
+// router.get('/', function (req, res, next) {
+//   let sql = `SELECT *  FROM stokes`
+//   con.query(sql, function (err, result) {
+//     if (err) throw err;
+//     else {
+//       res.send(result)
+//     }
+//   })
+// });
 
-router.get('/myInfo', function (req, res) {
-  let sql = `SELECT * FROM users WHERE user_id = ${req.body.id}`
+router.get('/myInfo/:userName', function (req, res) {
+  let sql = `SELECT * FROM users WHERE user_id = ${req.params.userName}`
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {

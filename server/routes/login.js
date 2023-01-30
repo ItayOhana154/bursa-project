@@ -2,20 +2,24 @@ var express = require('express');
 var router = express.Router();
 var con = require('../connection');
 
-router.post('/', function (req, res) {
-    let sql = `SELECT users.username, passwords.password FROM users
+router.post('/login', function (req, res) {
+    console.log("hi boazzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
+    console.log(req.body);
+    let sql = `SELECT users.*,
+    passwords.password FROM users
     INNER JOIN passwords
     ON users.id = passwords.id
-    WHERE users.username = '${req.body.username}'
+    WHERE users.user_name = '${req.body.username}'
     AND passwords.password = '${req.body.password}'`
     
     console.log('sql: ', sql);
-    con.query(sql, function (err, result) {
+    con.query(sql, function (err, user) {
+        console.log(user);
         if (err) {
             console.log(err);
-            res.send('there is a problem')
+            res.send(JSON.stringify({ "answer": user, "bool": false }))
         };
-        res.send(true);
+        res.send(JSON.stringify({ "answer": user, "bool": true }));
     })
 });
 
