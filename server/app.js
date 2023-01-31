@@ -32,16 +32,16 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 app.use('/sparkLog', loginRouter);
-app.use('/sparkReg', registerRouter); 
-app.use('/spark',stoksArrRouter)
+app.use('/sparkReg', registerRouter);
+app.use('/spark', stoksArrRouter)
 
 // catch 404 and forward to error handler
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
   next(createError(404));
 });
 
 // error handler
-app.use(function(err, req, res, next) {
+app.use(function (err, req, res, next) {
   // set locals, only providing error in development
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
@@ -54,34 +54,34 @@ app.use(function(err, req, res, next) {
 
 function readAndCreate(fileName) {
   let dataArr = [];
-  const data = fs.readFileSync(`./DB/${fileName}.json`, {encoding:'utf8', flag:'r'});
+  const data = fs.readFileSync(`./DB/${fileName}.json`, { encoding: 'utf8', flag: 'r' });
   let myData = JSON.parse(data)
-      for (let i = 0; i < myData.fields.length; i++) {
-        let rand = Math.floor(Math.random()* 500)
-         dataArr.push(
-          {
-            name: myData.fields[i].companyName,
-            id: i,
-            Quantity: rand,
-            price: Math.floor(Math.random()* 1000),
-            free_stoks: rand,
-            is_exist: 1,
-            }
-          )
+  for (let i = 0; i < myData.fields.length; i++) {
+    let rand = Math.floor(Math.random() * 500)
+    dataArr.push(
+      {
+        name: myData.fields[i].companyName,
+        id: i,
+        Quantity: rand,
+        price: Math.floor(Math.random() * 1000),
+        free_stoks: rand,
+        is_exist: 1,
       }
-    return dataArr;
+    )
+  }
+  return dataArr;
 }
 
 let con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "z10mz10m",
+  password: "itay1258",
   database: "bursa"
 });
 
 async function insertManeger() {
   let sqlCommand;
-  let data =  await readAndCreate("JSON");
+  let data = await readAndCreate("JSON");
   console.log("data:", data);
   console.log("data.length:", data.length);
   for (let i = 0; i < data.length; i++) {
@@ -89,7 +89,7 @@ async function insertManeger() {
     VALUES ( ${data[i].id}, '${data[i].name}', ${data[i].Quantity}, 
     ${data[i].price}, ${data[i].free_stoks}, ${data[i].is_exist})`
     con.query(sqlCommand, function (err, result) {
-        if (err) console.log(err);
+      if (err) console.log(err);
     });
   }
 }

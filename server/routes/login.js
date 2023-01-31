@@ -3,8 +3,6 @@ var router = express.Router();
 var con = require('../connection');
 
 router.post('/login', function (req, res) {
-    console.log("hi boazzzzzzzzzzzzzzzzzzzzzzzzzzzzz");
-    console.log(req.body);
     let sql = `SELECT users.*,
     passwords.password FROM users
     INNER JOIN passwords
@@ -12,7 +10,6 @@ router.post('/login', function (req, res) {
     WHERE users.user_name = '${req.body.username}'
     AND passwords.password = '${req.body.password}'`
     
-    console.log('sql: ', sql);
     con.query(sql, function (err, user) {
         console.log(user);
         if (err) {

@@ -13,8 +13,8 @@ var con = require('../connection');
 //   })
 // });
 
-router.get('/myInfo/:userName', function (req, res) {
-  let sql = `SELECT * FROM users WHERE user_id = ${req.params.userName}`
+router.get('/myInfo/:id', function (req, res) {
+  let sql = `SELECT * FROM users WHERE id = ${req.params.id}`
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {
@@ -23,8 +23,8 @@ router.get('/myInfo/:userName', function (req, res) {
   })
 });
 
-router.get('/myStokes', function (req, res) {
-  let sql = `SELECT * FROM stoke_history WHERE owner_id = ${req.body.id}`
+router.get(`/myStokes/:id`, function (req, res) {
+  let sql = `SELECT owner_name, stoke_name, Quantity_purchased FROM stoke_history WHERE owner_id = ${req.params.id}`
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {
