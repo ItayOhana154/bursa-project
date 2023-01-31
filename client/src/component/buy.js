@@ -7,12 +7,17 @@ function Buy(props) {
     const [quantity, setQuantity] = useState()
 
     function buyStokes() {
-        fetch(`http://localhost:8080/sparkLog/login`, {
+        fetch(`http://localhost:8080/spark/buy`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            // body: JSON.stringify({ username: userName, password: password }),
+            body: JSON.stringify({
+                itemPrice: price, itemQuantity: quantity,
+                 itemId: props.id, type: 1,
+                  personId: props.personId,
+                   stoke_name: props.stokeName, person_name: props.personName 
+            }),
         })
             .then((response) => response.json())
             .then((data) => {
@@ -24,9 +29,9 @@ function Buy(props) {
         <div>
             <h1 className='welcome'>Buy</h1>
             <form name="buying-form" id="buying" className="input-group" >
-                <input onChange={(ev) => setQuantity(ev.target.value)} name="password" type="password"
+                <input onChange={(ev) => setQuantity(ev.target.value)} name="password" type="number"
                     className="input-field" placeholder="Enter quantity" value={quantity} required />
-                <input onChange={(ev) => setPrice(ev.target.value)} name="password" type="password"
+                <input onChange={(ev) => setPrice(ev.target.value)} name="password" type="number"
                     className="input-field" placeholder="Enter price" value={price} required />
             </form>
             <button onClick={buyStokes} id="submit-login-btn" type="submit" className="submit-btn">
