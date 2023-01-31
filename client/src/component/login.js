@@ -1,26 +1,40 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { useNavigate } from "react-router-dom";
-import { userInfoContext } from "./userInfoContext";
+import { UserInfoContext } from "./userInfoContext";
 
 
 
 function Login() {
     const navigate = useNavigate();
-    const [userName, setUserName] = useState("boaz fride");
-    const [password, setPassword] = useState("b123");
-    const userInfo = useContext(userInfoContext);
+    const [userName, setUserName] = useState("");
+    const [password, setPassword] = useState("");
+    const userInfo = useContext(UserInfoContext);
+    
 
 
     function checkUser(bool, info) {
+
         if (bool) {
             userInfo.changeInfo(info[0].id, info[0].user_name);
-            navigate("/bursa/main");
+            // setTimeout(() => {
+            //     navigate("/bursa/main");
+            //     // window.location.reload();}
+            // }, 2000);
             return;
         }
         alert("your username or password is incorrect");
     }
 
-
+    function createCookie(id) {
+        var date = new Date();
+        date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
+        var expires = "expires=" + date.toUTCString();
+        document.cookie = `id=${id}; expires=${expires}; path=http://localhost:3000;`
+        // setTimeout(function () {
+            navigate("/bursa/main");
+        //     window.location.reload();
+        // }, 1000);
+    }
 
     function handleSubmit() {
         // event.preventDefault();
@@ -33,8 +47,9 @@ function Login() {
         })
             .then((response) => response.json())
             .then((data) => {
-                // console.log("data:", data);
+                console.log('data: ', data.answer[0].id);
                 checkUser(data.bool, data.answer);
+                createCookie(data.answer[0].id);
             })
     }
 

@@ -1,12 +1,19 @@
-import React, { createContext, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 
-export const userInfoContext = createContext();
+export const UserInfoContext = createContext();
 
 export const UserProvider = ({ children }) => {
-    const [myInfo, setMyInfo] = useState({
-        id: 1,
-        user_name: "boazFFF"
-    });
+    const [myInfo, setMyInfo] = useState({});
+
+    useEffect(() => {
+        const idCookie = document.cookie.split(';').find(c => c.trim().startsWith('id='));
+        if (idCookie) {
+            const cookieId = idCookie.split('=')[1];
+            setMyInfo({ id: cookieId })
+        }
+
+    }, []);
+
     const changeInfo = (Id, userName) => {
         setMyInfo({
             id: Id,
@@ -14,8 +21,8 @@ export const UserProvider = ({ children }) => {
         });
     };
 
-    return <userInfoContext.Provider value={{ myInfo, changeInfo }}>
+    return <UserInfoContext.Provider value={{ myInfo, changeInfo }}>
         {children}
-    </userInfoContext.Provider>;
+    </UserInfoContext.Provider>;
 
 }; 
