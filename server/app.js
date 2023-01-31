@@ -75,7 +75,7 @@ function readAndCreate(fileName) {
 let con = mysql.createConnection({
   host: "localhost",
   user: "root",
-  password: "itay1258",
+  password: "z10mz10m",
   database: "bursa"
 });
 
