@@ -23,7 +23,7 @@ function Main() {
         navigate("/bursa/main/stoke");
     }
 
-    function logOut() { 
+    function logOut() {
         document.cookie = 'id' + '=; Path=http://localhost:3000; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         document.cookie = 'username' + '=; Path=http://localhost:3000; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
         window.location.reload();
@@ -33,7 +33,6 @@ function Main() {
         <div id="mainPageDiv">
             <div id="navDiv">
                 <nav>
-                    <Search />
                     <ul>
                         <li><img id="NavSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" /></li>
                         <li><Link className='btn' to="/bursa/main/userInfo">Personal info</Link> </li>
@@ -45,8 +44,9 @@ function Main() {
                 <div id="mainHeaderAndNav">
                     <header>
                         <button id="logOutBtn" onClick={logOut}>log out</button>
-                        <h1 className='welcome'>Main page</h1>
+                        <Search />
                     </header>
+                    <h1 className='welcome'> Tel Aviv Stock Exchange </h1>
                 </div>
                 <div id="mainPageStokesDiv" >
                     {stokesArr.map((item, index) => {

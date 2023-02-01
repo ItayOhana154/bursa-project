@@ -54,7 +54,7 @@ function Company() {
                 <div id="stukeInfoDiv">
                     <p>stoke Quantity - {stoke[0] ? stoke[0].Quantity : null}</p>
                     <p>stoke available - {stoke[0] ? stoke[0].stoke_available : null}</p>
-                    <p>stoke price - {stoke[0] ? stoke[0].stoke_price : null}</p>
+                    <p>stoke price - {stoke[0] ? stoke[0].stoke_price : null}$</p>
                 </div>
             </div>
             <div className="buyAndSaleBtnDiv" >

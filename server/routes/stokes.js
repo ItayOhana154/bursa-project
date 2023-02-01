@@ -42,7 +42,7 @@ router.get('/main/stoke/search/:stokeName', function (req, res) {
 });
 router.get('/getImage', function (req, res) {
     const { random } = req.query;
-    res.sendFile(`/home/hilma/projects/projectWithOhana/bursa-project/server/public/images/stuke${random}.png`)
+    res.sendFile(`/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/stuke${random}.png`)
 })
 
 

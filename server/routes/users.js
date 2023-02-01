@@ -26,7 +26,7 @@ router.get('/myInfo/:id', function (req, res) {
 router.get(`/myStokes/:userName`, function (req, res) {
   let sql = `SELECT stoke_name, Quantity_purchased 
   FROM stoke_history 
-  WHERE owner_name = ${req.params.userName}`
+  WHERE owner = '${req.params.userName}'`
   console.log('sql: ', sql);
   con.query(sql, function (err, result) {
     if (err) throw err;

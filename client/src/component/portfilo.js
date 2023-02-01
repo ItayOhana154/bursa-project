@@ -9,17 +9,17 @@ function Portfolio(params) {
     const Navigate = useNavigate()
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.user_name}/`)
+        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.username}/`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
             })
             console.log("userInfo.myInfo.user_name:", userInfo.myInfo);
-        fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.user_name}`)
-            .then((response) => response.json())
-            .then((data) => {
-                console.log(data);
-            })
+        // fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.user_name}`)
+        //     .then((response) => response.json())
+        //     .then((data) => {
+        //         console.log(data);
+        //     })
     }, [])
 
     if (!data) {
