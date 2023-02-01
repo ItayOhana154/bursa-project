@@ -1,11 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "./userInfoContext";
 import MassagesToUser from "./massagesToUser";
+import { useNavigate } from 'react-router-dom'
+
 
 function UserInfo() {
     const userInfo = useContext(UserInfoContext);
     const [myBool, setBool] = useState(false)
     const [data, setData] = useState();
+    const Navigate = useNavigate();
 
     useEffect(() => {
         fetch(`http://localhost:8080/users/myInfo/${userInfo.myInfo.id}`)
@@ -15,7 +18,6 @@ function UserInfo() {
             })
     }, [])
 
-    // console.log('data: ', data);
     if (!data) {
         return <h1>Loading...</h1>
     }
@@ -25,13 +27,20 @@ function UserInfo() {
         bool ? bool = false : bool = true;
         setBool(bool);
     }
+    function returnToMainPage() {
+        Navigate('/bursa/main ');
+    }
 
     return (
         <div>
             {data.map((item) => (
                 <div id="userInfoDiv" key={item.id}>
-                    <h1 className='welcome'>hello {item.user_name}! </h1><br />
-                    <p>
+                    <header className="appPagesNavigate">
+                        <button className="appPagesNavigateBtn" onClick={returnToMainPage}> main page </button>
+                        <h1 className='welcome' id="userInfoH1">hello {item.user_name}! </h1>
+                        <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
+                    </header>
+                    <p id="userInfoP">
                         phone number: 0{item.phone_num} <br />
                         email: {item.email} <br />
                         <br />

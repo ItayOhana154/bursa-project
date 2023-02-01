@@ -12,7 +12,7 @@ function Login() {
 
     function checkUser(bool, info) {
         if (bool) {
-            userInfo.changeInfo(info[0].id, info[0].user_name);;
+            userInfo.changeInfo(info[0].id, info[0].user_name);
             return;
         }
         alert("your username or password is incorrect");
@@ -20,9 +20,11 @@ function Login() {
 
     function createCookie(id) {
         var date = new Date();
+        console.log('date: ', date);
         date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
         var expires = "expires=" + date.toUTCString();
         document.cookie = `id=${id}; expires=${expires}; path=http://localhost:3000;`
+        document.cookie = `username=${userName}; expires=${expires}; path=http://localhost:3000;`
         navigate("/bursa/main");
     }
 
