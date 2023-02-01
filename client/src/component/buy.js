@@ -39,8 +39,8 @@ function Buy(props) {
     }
 
     return (
-        <div>
-            <h1 className='welcome'>Buy</h1>
+        <div className="salesDivs" >
+            <h2 className='welcome'>Buy</h2>
             <form name="buying-form" id="buying" className="input-group" >
                 <input onChange={(ev) => setQuantity(ev.target.value)} name="password" type="number"
                     className="input-field" placeholder="Enter quantity" value={quantity} required />

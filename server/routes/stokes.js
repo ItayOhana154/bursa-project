@@ -57,6 +57,11 @@ function queryForBuyOrSell(params, res) {
     })
 }
 
+router.get('/getImage', function (req, res) {
+    const { random } = req.query;
+    res.sendFile(`/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/stuke${random}.png`)
+})
+
 
 
 // get into offers tables and check if any offer match:
@@ -65,8 +70,7 @@ function checkForMatch(params, res) {
     let stokesToSeller;
     let stokesToBuyer;
     let sql;
-    console.log("params:", params);
-    // selling:
+    // selling
     if (params.type === 0) {
         sql = `SELECT * FROM offers
         WHERE type = 1 

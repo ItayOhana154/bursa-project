@@ -1,13 +1,261 @@
+/* base css */
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100vw;
+  background-color: rgb(13, 153, 196);
+}
+
+img {
+  width: 55vw;
+}
+
+h4 {
+  margin: 0px;
+  padding: 0px;
+}
+
+p {
+  margin: 0px;
+  padding: 0px;
+  display: flex;
+  text-align: start;
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
+}
+
+html {
+  margin: 0px;
+  height: 100%;
+  width: 100%;
+}
+
+ul {
+  list-style-type: none;
+}
+
+link {
+  text-decoration: none;
+}
+
+a {
+  text-decoration: none;
+  color: black;
+}
+
+nav {
+  height: 80vh;
+  position: fixed;
+  display: flex;
+}
+
+button {
+  border: 4px outset rgb(175, 175, 175);
+  background-color: rgb(224, 224, 224);
+}
+
+form {
+  /* display: flex; */
+  text-align: center;
+  /* flex-direction: column; */
+  width: 20vw;
+  align-items: center;
+}
+
+form input {
+  /* display: flex; */
+  text-align: center;
+  /* flex-direction: column; */
+  margin-bottom: 1vh;
+}
+
+ol{
+  display: flex;
+  flex-direction: column;
+  font-size: 30px;
+  width: 30vw;
+}
+
+/* classes css */
+.homePageBtn {
+  margin: 10px;
+  padding: 1vh 2vw;
+}
+
+.buyAndSaleBtnDiv {
+  display: flex;
+  justify-content: center;
+  margin: 0vh 0vw 3vh 0vw; ;
+}
+
+.salesDivs{
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.myStukes{
+  display: flex;
+  text-align: center;
+  flex-direction: column;
+  align-items: center;
+  padding: 1vh;
+}
+
+.myStukes p {
+  text-align: center;
+  padding: 1vh;
+  background-color: aliceblue;
+  border: 2px outset rgb(144, 142, 142) ;
+  font-size: 16px;
+}
+
+/* ids css */
+#homePageBtnDiv {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  width: 20vw;
+}
+
+#homePageDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh;
+  justify-content: center;
+}
+
+#LoginBtn {
+  margin-left: 0vw;
+}
+
+#registerDiv {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#registerDiv button {
+  width: 15vh;
+}
+
+#RegisterFormDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3px;
+}
+
+#loginFormDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 3px;
+}
+
+#headerAndStokesDiv {
+  width: 89vw;
+  float: left;
+}
+
+#mainPageStokesDiv {
+  /* width: 89vw; */
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+}
+
+#mainPageStokesDiv ul {
+  /* display: flex; */
+  padding: 1vw;
+  margin: 1vh 1vw;
+  /* flex-direction: none; */
+}
+
+#mainPageStokesDiv ul li {
+  border: 2px outset rgb(118, 118, 196);
+  background-color: rgb(156, 156, 233);
+}
+
+#mainHeaderAndNav {
+  /* display: flex; */
+  justify-content: space-around;
+  align-items: center;
+}
+
+#mainHeaderAndNav #navDiv {
+  /* display: flex; */
+}
+
+#root {
+  height: 100%;
+}
+
+#navDiv {
+  position: fixed;
+  width: 10vw;
+  float: right;
+  right: 3vw;
+  display: inline-block;
+}
+
+#navDiv nav {
+  position: sticky;
+  /* height: 30vh;
+  width: 10vw; */
+}
+
+#navDiv nav ul {
+  height: 80vh;
+  display: flex;
+  justify-content: space-evenly;
+  flex-direction: column;
+}
+
+
+#root {
+  width: 100%;
+  height: 100vh;
+}
+
+#userInfoDiv p {
+  text-align: center;
+  justify-content: center;
+}
+
+#stukeInfoDiv {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 2vh;
+  font-size: 20px;
+}
+
+#companyInfoDiv button {
+  margin: 2vh;
+  padding: 0vh 2vw;
+}
+
+#companyInfoDiv h1{
+  font-size: 40px;
+}
+
+#usersStukes{
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
