@@ -16,7 +16,6 @@ router.post('/register', function (req, res) {
 });
 
 function createUser(req, res) {
-    console.log("hiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii");
     let sql = `INSERT INTO users (user_name, phone_num, email, bank_num, creditCard_num, user_type, isExist ) VALUES
     ('${req.body.username}', '${req.body.phone_num}', '${req.body.email}', ${req.body.bank_num}, '${req.body.creditCard_num}', 0, 1)`
 

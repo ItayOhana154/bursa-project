@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { stokeIdContext } from "./stokeNameContext";
-import { userInfoContext } from "./userInfoContext";
+import { UserInfoContext } from "./userInfoContext";
 import Buy from "./buy";
 import Sell from "./sell";
 
@@ -9,7 +9,7 @@ import Sell from "./sell";
 function Company() {
     const [stoke, setStoke] = useState("")
     const stokeNumId = useContext(stokeIdContext);
-    const userInfo = useContext(userInfoContext);
+    const userInfo = useContext(UserInfoContext);
     const [boolBuy, setBoolBuy] = useState(false)
     const [boolSell, setBoolSell] = useState(false)
 
@@ -19,7 +19,6 @@ function Company() {
         fetch(`http://localhost:8080/spark/main/stoke/${stokeNumId.stokeId}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log("data:", data);
                 setStoke(data)
             })
     }, [])

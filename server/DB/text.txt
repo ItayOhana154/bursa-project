@@ -1,0 +1,4 @@
+SELECT * FROM offers WHERE type = 0 AND stoke_id = 7 AND price <= ;
+
+
+DELETE FROM offers WHERE stoke_name = NULL;

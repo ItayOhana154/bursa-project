@@ -7,6 +7,7 @@ function Buy(props) {
     const [quantity, setQuantity] = useState()
 
     function buyStokes() {
+        console.log("props.personName:", props.personName);
         fetch(`http://localhost:8080/spark/buy`, {
             method: 'POST',
             headers: {
@@ -14,14 +15,26 @@ function Buy(props) {
             },
             body: JSON.stringify({
                 itemPrice: price, itemQuantity: quantity,
-                 itemId: props.id, type: 1,
-                  personId: props.personId,
-                   stoke_name: props.stokeName, person_name: props.personName 
+                itemId: props.id, type: 1,
+                personId: props.personId,
+                stoke_name: props.stokeName, person_name: props.personName
             }),
         })
             .then((response) => response.json())
             .then((data) => {
-                // console.log("data:", data);
+                switch (data.ans) {
+                    case 0:
+                        alert("something bad happened, there is an error.")
+                        break;
+                    case 1:
+                        alert("your request is waiting for much...")
+                        break;
+                    case 2:
+                        alert("your request completed")
+                        break;
+                    default:
+                        alert("error. try to reload or call to Technical Support")
+                }
             })
     }
 

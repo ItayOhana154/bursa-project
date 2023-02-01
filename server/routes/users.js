@@ -23,8 +23,10 @@ router.get('/myInfo/:id', function (req, res) {
   })
 });
 
-router.get(`/myStokes/:id`, function (req, res) {
-  let sql = `SELECT owner_name, stoke_name, Quantity_purchased FROM stoke_history WHERE owner_id = ${req.params.id}`
+router.get(`/myStokes/:userName`, function (req, res) {
+  let sql = `SELECT stoke_name, Quantity_purchased 
+  FROM stoke_history 
+  WHERE owner = '${req.params.userName}'`
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {

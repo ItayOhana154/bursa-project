@@ -7,7 +7,7 @@ function Portfolio(params) {
     const [data, setData] = useState();
     
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myStokes/'${userInfo.myInfo.id}'/`)
+        fetch(`http://localhost:8080/users/myStokes/'${userInfo.myInfo.user_name}'/`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);

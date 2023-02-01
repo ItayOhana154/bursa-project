@@ -13,7 +13,6 @@ function Login() {
 
 
     function checkUser(bool, info) {
-
         if (bool) {
             userInfo.changeInfo(info[0].id, info[0].user_name);
             // setTimeout(() => {
@@ -47,7 +46,7 @@ function Login() {
         })
             .then((response) => response.json())
             .then((data) => {
-                console.log('data: ', data.answer[0].id);
+                console.log("login data", data);
                 checkUser(data.bool, data.answer);
                 createCookie(data.answer[0].id);
             })

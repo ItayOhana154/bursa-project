@@ -33,26 +33,26 @@ router.get('/main/stoke/:id', function (req, res) {
 
 // Set buy offer function:
 router.post('/buy', function (req, res) {
-    queryForBuyOrSell(req.body)
+    queryForBuyOrSell(req.body, res)
+    console.log("req.body:", req.body);
 });
 // Set sell offer function:
 router.post('/sell', function (req, res) {
-    queryForBuyOrSell(req.body)
+    queryForBuyOrSell(req.body, res)
 });
 
-function queryForBuyOrSell(params) {
+function queryForBuyOrSell(params, res) {
     deleteIfQuantityIsZero()
-    console.log(params);
     let sql = `INSERT INTO offers ( price, Quantity, stoke_id, type, person_id, stoke_name)  
     VALUES (${params.itemPrice}, ${params.itemQuantity},
         ${params.itemId}, ${params.type},
-         ${params.personId}, '${params.stoke_name}')`
+         ${params.personId}, '${params.stoke_name}')`;
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
+            return (0);
         } else {
-            console.log("result:", result);
-            checkForMatch(params)
+            checkForMatch(params, res)
         }
     })
 }
@@ -60,11 +60,12 @@ function queryForBuyOrSell(params) {
 
 
 // get into offers tables and check if any offer match:
-function checkForMatch(params) {
+function checkForMatch(params, res) {
+    console.log("params:", params);
     let stokesToSeller;
     let stokesToBuyer;
     let sql;
-    // console.log("params.type:", params.type);
+    console.log("params:", params);
     // selling:
     if (params.type === 0) {
         sql = `SELECT * FROM offers
@@ -73,35 +74,46 @@ function checkForMatch(params) {
         AND price >= ${params.itemPrice}
         ORDER BY offer_id LIMIT 1`
         con.query(sql, function (err, result) {
-            console.log("result.length:", result.length);
             if (err) {
-                console.log(err)
-                return (0)
+                res.send({ ans: 0 });
             } else {
                 if (result.length === 0) {
                     // everything is ok but there is no much
-                    return (1)
+                    res.send({ ans: 1 });
                 }
                 if (result.length > 0) {
-                    if (params.itemQuantity >= result[0].Quantity) {
-                        console.log("bigger");
-                        stokesToBuyer = result[0].Quantity;
-                        insertValueBackToOffersTable(result[0].person_id, 0);
-                        // לעדכן את הצעת הקניה ל0, ולעדכן את הכמות בטבלה של המניות
-                        stokesToSeller = params.itemQuantity - result[0].Quantity;
-                        insertValueBackToOffersTable(params.personId, stokesToSeller);
-                        // להחזיר לטבלה של המכירות את הכמות שנשארה למוכר למכור ולעדכן את כמות המניות בטבלה של המניות
-                    }
-                    if (params.itemQuantity < result[0].Quantity) {
-                        stokesToBuyer = params.itemQuantity;
-                        insertValueBackToOffersTable(result[0].person_id, result[0].Quantity - stokesToBuyer);
-                        // לעדכן את הצעת הקניה, ולעדכן את הטבלה של המניות
-                        stokesToSeller = 0;
-                        insertValueBackToOffersTable(params.personId, 0);
-                        // לעדכן את הצעת המכירה ל0, ולעדכן את הכמות בטבלה של המניות
-                    }
-                    // insert the value back to tables
-                    return (2)
+                    let mysql = `SELECT user_name FROM users
+                    WHERE id = ${Number(result[0].person_id)};`
+                    let nameOfTrader;
+                    con.query(mysql, function (err, user) {
+                        if (err) {
+                            console.log("errrrrrrr:", err);
+                        }
+                        nameOfTrader = user[0].user_name
+                        if (params.itemQuantity >= result[0].Quantity) {
+                            stokesToBuyer = result[0].Quantity;
+                            insertValueBackToOffersTable(result[0].offer_id, 0);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, nameOfTrader, stokesToBuyer, 0)
+                            // לעדכן את הצעת הקניה ל0, ולעדכן את הכמות בטבלה של המניות
+                            stokesToSeller = params.itemQuantity - result[0].Quantity;
+                            insertValueBackToOffersTable(params.itemId, stokesToSeller);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, result[0].Quantity, 1)
+                            // להחזיר לטבלה של המכירות את הכמות שנשארה למוכר למכור ולעדכן את כמות המניות בטבלה של המניות
+                            console.log("3");
+                        }
+                        if (params.itemQuantity < result[0].Quantity) {
+                            stokesToBuyer = params.itemQuantity;
+                            insertValueBackToOffersTable(result[0].offer_id, result[0].Quantity - stokesToBuyer);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, nameOfTrader, stokesToBuyer, 0);
+                            // לעדכן את הצעת הקניה, ולעדכן את הטבלה של המניות
+                            stokesToSeller = 0;
+                            insertValueBackToOffersTable(params.itemId, 0);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, params.itemQuantity, 1)
+                            // לעדכן את הצעת המכירה ל0, ולעדכן את הכמות בטבלה של המניות
+                            console.log("3");
+                        }
+                        res.send({ ans: 2 });
+                    })
                 }
             }
         })
@@ -113,39 +125,60 @@ function checkForMatch(params) {
         sql = `SELECT * FROM offers
         WHERE type = 0 
         AND stoke_id = ${params.itemId} 
-        AND price <= ${params.itemPrice}`
+        AND price <= ${params.itemPrice};`
         con.query(sql, function (err, result) {
+            let nameOfTrader;
+            console.log("result[0]:", result[0]);
             if (err) {
                 console.log(err)
-                return (0)
+                res.send({ ans: 0 });
             } else {
                 if (result.length === 0) {
-                    return (1)
+                    res.send({ ans: 1 });
                 }
                 if (result.length > 0) {
-                    if (params.itemQuantity <= result[0].Quantity) {
-                        stokesToBuyer = params.itemQuantity
-                        insertValueBackToOffersTable(params.personId, 0);
-                        // לעדכן את ההצעה ל0, ולעדכן את הטבלה של המניות
-                        stokesToSeller = result[0].Quantity - params.itemQuantity
-                        insertValueBackToOffersTable(result[0].person_id, stokesToSeller);
-                        // לעדכן את הצעת הקניה , ולעדכן את טבלת המניות
-                    }
-                    if (params.itemQuantity > result[0].Quantity) {
-                        stokesToBuyer = result[0].Quantity;
-                        insertValueBackToOffersTable(params.personId, params.itemQuantity - result[0].Quantity);
-                        // לעדכן את ההצעה של הקניה להצעה פחות המניות שקניתי, ולעדכן את טבלת המניות
-                        stokesToSeller = 0;
-                        insertValueBackToOffersTable(result[0].person_id, 0);
-                        // לעדכן את הצעת המכירה ל0, ולעדכן את טבלת המניות
-                    }
-                    return (2)
+                    let mysql = `SELECT user_name FROM users
+                    WHERE id = ${Number(result[0].person_id)}`
+                    con.query(mysql, function (err, user) {
+                        if (err) {
+                            console.log(err);
+                            res.send({ ans: 0 });
+                        }
+                        console.log("user[0].user_name:", user[0].user_name);
+                        nameOfTrader = user[0].user_name
+                        if (params.itemQuantity <= result[0].Quantity) {
+                            stokesToBuyer = params.itemQuantity
+                            insertValueBackToOffersTable(params.itemId, 0);
+                            console.log("params.person_name:", params.person_name);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, params.itemQuantity, 0)
+                            // לעדכן את ההצעה ל0, ולעדכן את הטבלה של המניות
+                            stokesToSeller = result[0].Quantity - params.itemQuantity
+                            insertValueBackToOffersTable(result[0].offer_id, stokesToSeller);
+                            console.log("nameOfTrader:", nameOfTrader);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, nameOfTrader, params.itemQuantity, 1)
+                            // לעדכן את הצעת הקניה , ולעדכן את טבלת המניות
+                            console.log("3");
+                            changePriceOfStokeInStokeTable(result[0].stoke_id, result[0].price);
+                        }
+                        if (params.itemQuantity > result[0].Quantity) {
+                            stokesToBuyer = result[0].Quantity;
+                            insertValueBackToOffersTable(params.itemId, params.itemQuantity - result[0].Quantity);
+                            console.log("params.person_name:", params.person_name);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, stokesToBuyer, 0)
+                            // לעדכן את ההצעה של הקניה להצעה פחות המניות שקניתי, ולעדכן את טבלת המניות
+                            stokesToSeller = 0;
+                            insertValueBackToOffersTable(result[0].offer_id, 0);
+                            console.log("nameOfTrader:", nameOfTrader);
+                            insertValueBackToStoke_historyTable(result[0].stoke_name, nameOfTrader, result[0].Quantity, 1)
+                            // לעדכן את הצעת המכירה ל0, ולעדכן את טבלת המניות
+                            console.log("3");
+                            changePriceOfStokeInStokeTable(result[0].stoke_id, result[0].price)
+                        }
+                        res.send({ ans: 2 });
+                    })
                 }
             }
         })
-    }
-    else {
-        return ("error")
     }
 }
 
@@ -153,40 +186,65 @@ function insertValueBackToOffersTable(idOfOffer, stokeQuantity) {
     let sql = `UPDATE offers
     SET Quantity = ${stokeQuantity}
     WHERE offer_id = ${idOfOffer};`
+    console.log("1");
+    console.log("sql offers:", sql);
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
             return (err);
-        } else {
-            return (result);
+        }
+    })
+}
+// result[0].price
+// result[0].stoke_id
+function changePriceOfStokeInStokeTable(stokeId, price) {
+    let sql = `UPDATE stokes
+            SET stoke_price = ${price}
+            WHERE id = ${stokeId};`
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log(err)
+            return (err);
         }
     })
 }
 
 function insertValueBackToStoke_historyTable(stokeName, ownerName, quantity, operator) {
     let sql;
-    if (operator === 0) {
-        sql = `UPDATE stoke_name
-            SET Quantity_purchased = Quantity_purchased + ${quantity}
-            WHERE owner = '${ownerName}'
-            AND stoke_name = '${stokeName}';`
-    } else {
-        sql = `UPDATE stoke_name
-            SET Quantity_purchased = Quantity_purchased - ${quantity}
-            WHERE owner = '${ownerName}'
-            AND stoke_name = '${stokeName}';`
-    }
-    con.query(sql, function (err, result) {
+    sql = `SELECT * FROM stoke_history
+    WHERE owner = '${ownerName}'
+    AND stoke_name = '${stokeName}';`
+    con.query(sql, function (err, res) {
         if (err) {
             console.log(err)
-            return (err);
-        } else {
-            return (result);
         }
+        if (res.length === 0) {
+            // complite that tommorow!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+            sql = `INSERT INTO stoke_history (stoke_name, owner, Quantity_purchased)
+            VALUES ('${stokeName}', '${ownerName}', ${quantity});`
+        } else {
+            if (operator === 0) {
+                sql = `UPDATE stoke_history
+                    SET Quantity_purchased = Quantity_purchased + ${quantity}
+                    WHERE owner = '${ownerName}'
+                    AND stoke_name = '${stokeName}';`
+            } else {
+                sql = `UPDATE stoke_history
+                    SET Quantity_purchased = Quantity_purchased - ${quantity}
+                    WHERE owner = '${ownerName}'
+                    AND stoke_name = '${stokeName}';`
+            }
+        }
+        console.log("2");
+        console.log("sql history:", sql);
+        con.query(sql, function (err, result) {
+            if (err) {
+                console.log(err)
+                return (err);
+            }
+        })
     })
 }
-
-
 
 function deleteIfQuantityIsZero() {
     let sql = `DELETE FROM offers 
@@ -194,37 +252,10 @@ function deleteIfQuantityIsZero() {
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
+            return (err);
         }
     })
 }
 
 module.exports = router;
-
-// function shortWayToInsertBuyerAndSeller(stokesQuantity, personInfo, sellerInfo) {
-//     let sql = `INSERT INTO stoke_history ( id, stoke_name, owner, Quantity_purchased)  
-//         VALUES (${personInfo}, '${sellerInfo.stoke_name}', '${sellerInfo.person_name}',
-//         ${stokesQuantity})`
-//     con.query(sql, function (err, result) {
-//         if (err) {
-//             console.log(err)
-//             return (err);
-//         } else {
-//             return (result);
-//         }
-//     })
-// }
-
-// function insertValueBackSeller(sellerInfo, buyerInfo, stokesToSeller, stokesToBuyer) {
-//     let seller = sellerInfo.personId;
-//     let buyer = buyerInfo.person_id;
-//     shortWayToInsertBuyerAndSeller(stokesToSeller, seller, sellerInfo)
-//     shortWayToInsertBuyerAndSeller(stokesToBuyer, buyer, sellerInfo)
-// }
-
-// function insertValueBackBuyer(sellerInfo, buyerInfo, stokesToSeller, stokesToBuyer) {
-//     let seller = buyerInfo.person_id;
-//     let buyer = sellerInfo.personId;
-//     shortWayToInsertBuyerAndSeller(stokesToSeller, seller, sellerInfo)
-//     shortWayToInsertBuyerAndSeller(stokesToBuyer, buyer, sellerInfo)
-// }
 
