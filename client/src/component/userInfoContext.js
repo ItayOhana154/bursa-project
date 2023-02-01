@@ -7,9 +7,11 @@ export const UserProvider = ({ children }) => {
 
     useEffect(() => {
         const idCookie = document.cookie.split(';').find(c => c.trim().startsWith('id='));
-        if (idCookie) {
+        const userNameCookie = document.cookie.split(';').find(c => c.trim().startsWith('username='));
+        if (idCookie && userNameCookie) {
             const cookieId = idCookie.split('=')[1];
-            setMyInfo({ id: cookieId })
+            const cookieusername = userNameCookie.split('=')[1];
+            setMyInfo({ id: cookieId , username: cookieusername })
         }
 
     }, []);
@@ -17,7 +19,7 @@ export const UserProvider = ({ children }) => {
     const changeInfo = (Id, userName) => {
         setMyInfo({
             id: Id,
-            user_name: userName
+            username: userName
         });
     };
 

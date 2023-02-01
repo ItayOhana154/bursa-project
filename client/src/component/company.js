@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Link } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { stokeIdContext } from "./stokeNameContext";
 import { UserInfoContext } from "./userInfoContext";
 import Buy from "./buy";
@@ -7,6 +7,7 @@ import Sell from "./sell";
 
 
 function Company() {
+    const Navigate = useNavigate();
     const [stoke, setStoke] = useState("")
     const stokeNumId = useContext(stokeIdContext);
     const userInfo = useContext(UserInfoContext);
@@ -24,6 +25,7 @@ function Company() {
     }, [])
 
     const showBuy = (index) => {
+        console.log('userInfo.myInfo.user_name: ', userInfo.myInfo);
         let bool = boolBuy
         bool ? bool = false : bool = true;
         setBoolBuy(bool);
@@ -33,12 +35,21 @@ function Company() {
         bool ? bool = false : bool = true;
         setBoolSell(bool);
     }
-
+    
+    function returnToMainPage() {
+        Navigate('/bursa/main ');
+    }
 
     return (
         <div id="companyInfoDiv">
             <div>
-                <h1 className='welcome'>{stoke[0] ? stoke[0].stoke_name : null}</h1>
+                <header className="appPagesNavigate">
+                    <button className="appPagesNavigateBtn" onClick={ returnToMainPage }> main page </button>
+                    <div>
+                        <h1 className='welcome'>{stoke[0] ? stoke[0].stoke_name : null}</h1>
+                    </div>
+                    <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
+                </header>
                 <img src={`http://localhost:8080/spark/getImage?random=${randomNumber}`} alt="stoke chart" />
                 <div id="stukeInfoDiv">
                     <p>stoke Quantity - {stoke[0] ? stoke[0].Quantity : null}</p>

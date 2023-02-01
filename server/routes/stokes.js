@@ -46,7 +46,7 @@ function queryForBuyOrSell(params, res) {
     let sql = `INSERT INTO offers ( price, Quantity, stoke_id, type, person_id, stoke_name)  
     VALUES (${params.itemPrice}, ${params.itemQuantity},
         ${params.itemId}, ${params.type},
-         ${params.personId}, '${params.stoke_name}')`;
+        ${params.personId}, '${params.stoke_name}')`;
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
@@ -148,7 +148,6 @@ function checkForMatch(params, res) {
                             console.log(err);
                             res.send({ ans: 0 });
                         }
-                        console.log("user[0].user_name:", user[0].user_name);
                         nameOfTrader = user[0].user_name
                         if (params.itemQuantity <= result[0].Quantity) {
                             stokesToBuyer = params.itemQuantity

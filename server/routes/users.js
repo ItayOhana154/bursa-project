@@ -26,15 +26,23 @@ router.get('/myInfo/:id', function (req, res) {
 router.get(`/myStokes/:userName`, function (req, res) {
   let sql = `SELECT stoke_name, Quantity_purchased 
   FROM stoke_history 
-  WHERE owner = '${req.params.userName}'`
+  WHERE owner_name = ${req.params.userName}`
+  console.log('sql: ', sql);
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {
+      console.log('req: ', req.params.userName);
+      console.log('resss', result);
       res.send(result)
     }
   })
 });
 
+
+
+router.get('/getsymbul', function (req, res) {
+  res.sendFile('/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/symbul.png')
+})
 
 
 

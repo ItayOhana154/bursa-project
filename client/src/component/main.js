@@ -18,9 +18,14 @@ function Main() {
     }, [])
 
     function moveToStoke(index) {
-        // console.log("stokesArr[index]:", stokesArr[index]);
         stokeNumId.changeId(stokesArr[index].id)
         navigate("/bursa/main/stoke");
+    }
+
+    function logOut() { 
+        document.cookie = 'id' + '=; Path=http://localhost:3000; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        document.cookie = 'username' + '=; Path=http://localhost:3000; Expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+        window.location.reload();
     }
 
     return (
@@ -28,6 +33,7 @@ function Main() {
             <div id="navDiv">
                 <nav>
                     <ul>
+                        <li><img id="NavSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" /></li>
                         <li><Link className='btn' to="/bursa/main/userInfo">Personal info</Link> </li>
                         <li><Link className='btn' to="/bursa/main/portfolio">Personal trading portfolio</Link> </li>
                     </ul>
@@ -36,6 +42,7 @@ function Main() {
             <div id="headerAndStokesDiv">
                 <div id="mainHeaderAndNav">
                     <header>
+                        <button id="logOutBtn" onClick={logOut}>log out</button>
                         <h1 className='welcome'>Main page</h1>
                     </header>
                 </div>
