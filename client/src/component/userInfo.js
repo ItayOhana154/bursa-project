@@ -1,21 +1,29 @@
 import React, { useContext, useEffect, useState } from "react";
 import { UserInfoContext } from "./userInfoContext";
+import MassagesToUser from "./massagesToUser";
 
-function UserInfo(params) {
+function UserInfo() {
     const userInfo = useContext(UserInfoContext);
+    const [myBool, setBool] = useState(false)
     const [data, setData] = useState();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myInfo/'${userInfo.myInfo.id}'`)
+        fetch(`http://localhost:8080/users/myInfo/${userInfo.myInfo.id}`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
             })
     }, [])
 
-    console.log('data: ', data);
+    // console.log('data: ', data);
     if (!data) {
         return <h1>Loading...</h1>
+    }
+
+    const showBuy = () => {
+        let bool = myBool
+        bool ? bool = false : bool = true;
+        setBool(bool);
     }
 
     return (
@@ -34,6 +42,8 @@ function UserInfo(params) {
                     </p>
                 </div>
             ))}
+            <button onClick={() => (showBuy())}>personal massage</button>
+            {myBool ? <MassagesToUser personId={userInfo.myInfo.id} /> : <p></p>}
         </div>
     )
 

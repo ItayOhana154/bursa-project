@@ -2,6 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import { Link } from 'react-router-dom';
 import { useNavigate } from "react-router-dom";
 import { stokeIdContext } from "./stokeNameContext";
+import Search from "./search";
 
 
 function Main() {
@@ -27,6 +28,7 @@ function Main() {
         <div id="mainPageDiv">
             <div id="navDiv">
                 <nav>
+                    <Search />
                     <ul>
                         <li><Link className='btn' to="/bursa/main/userInfo">Personal info</Link> </li>
                         <li><Link className='btn' to="/bursa/main/portfolio">Personal trading portfolio</Link> </li>

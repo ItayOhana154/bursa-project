@@ -27,6 +27,25 @@ router.get('/main/stoke/:id', function (req, res) {
     })
 });
 
+router.get('/main/stoke/search/:stokeName', function (req, res) {
+    console.log("req.params.stokeName:", req.params.stokeName);
+    let sql = `SELECT * FROM stokes
+    WHERE stoke_name LIKE '%${req.params.stokeName}%'
+    ORDER BY id LIMIT 1;`
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log(err)
+        } else {
+            res.send(result)
+        }
+    })
+});
+router.get('/getImage', function (req, res) {
+    const { random } = req.query;
+    res.sendFile(`/home/hilma/projects/projectWithOhana/bursa-project/server/public/images/stuke${random}.png`)
+})
+
+
 
 
 // MarketPlace///////////////////////////////////////////////
@@ -57,11 +76,6 @@ function queryForBuyOrSell(params, res) {
     })
 }
 
-router.get('/getImage', function (req, res) {
-    const { random } = req.query;
-    res.sendFile(`/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/stuke${random}.png`)
-})
-
 
 
 // get into offers tables and check if any offer match:
@@ -72,6 +86,7 @@ function checkForMatch(params, res) {
     let sql;
     // selling
     if (params.type === 0) {
+        console.log("paramsssssssss:", params);
         sql = `SELECT * FROM offers
         WHERE type = 1 
         AND stoke_id = ${params.itemId} 
@@ -81,9 +96,11 @@ function checkForMatch(params, res) {
             if (err) {
                 res.send({ ans: 0 });
             } else {
+                console.log(result[0]);
                 if (result.length === 0) {
                     // everything is ok but there is no much
                     res.send({ ans: 1 });
+                    insertMassages(params.personId, 0, params.itemId);
                 }
                 if (result.length > 0) {
                     let mysql = `SELECT user_name FROM users
@@ -104,6 +121,9 @@ function checkForMatch(params, res) {
                             insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, result[0].Quantity, 1)
                             // להחזיר לטבלה של המכירות את הכמות שנשארה למוכר למכור ולעדכן את כמות המניות בטבלה של המניות
                             console.log("3");
+                            // אחת שולחת הודעה לקונה ואחת למוכר
+                            insertMassages(params.personId, 1, params.itemId);
+                            insertMassages(result[0].person_id, 1, result[0].offer_id);
                         }
                         if (params.itemQuantity < result[0].Quantity) {
                             stokesToBuyer = params.itemQuantity;
@@ -115,6 +135,9 @@ function checkForMatch(params, res) {
                             insertValueBackToStoke_historyTable(result[0].stoke_name, params.person_name, params.itemQuantity, 1)
                             // לעדכן את הצעת המכירה ל0, ולעדכן את הכמות בטבלה של המניות
                             console.log("3");
+                            // אחת שולחת הודעה לקונה ואחת למוכר
+                            insertMassages(params.personId, 1, params.itemId);
+                            insertMassages(result[0].person_id, 1, result[0].offer_id);
                         }
                         res.send({ ans: 2 });
                     })
@@ -124,6 +147,8 @@ function checkForMatch(params, res) {
 
 
     }
+    //     result[0].person_id
+    // result[0].offer_id
     // buying:
     if (params.type === 1) {
         sql = `SELECT * FROM offers
@@ -139,6 +164,7 @@ function checkForMatch(params, res) {
             } else {
                 if (result.length === 0) {
                     res.send({ ans: 1 });
+                    insertMassages(params.personId, 0, params.itemId);
                 }
                 if (result.length > 0) {
                     let mysql = `SELECT user_name FROM users
@@ -163,6 +189,9 @@ function checkForMatch(params, res) {
                             // לעדכן את הצעת הקניה , ולעדכן את טבלת המניות
                             console.log("3");
                             changePriceOfStokeInStokeTable(result[0].stoke_id, result[0].price);
+                            // אחת שולחת הודעה לקונה ואחת למוכר
+                            insertMassages(params.personId, 1, params.itemId);
+                            insertMassages(result[0].person_id, 1, result[0].offer_id);
                         }
                         if (params.itemQuantity > result[0].Quantity) {
                             stokesToBuyer = result[0].Quantity;
@@ -177,6 +206,9 @@ function checkForMatch(params, res) {
                             // לעדכן את הצעת המכירה ל0, ולעדכן את טבלת המניות
                             console.log("3");
                             changePriceOfStokeInStokeTable(result[0].stoke_id, result[0].price)
+                            // אחת שולחת הודעה לקונה ואחת למוכר
+                            insertMassages(params.personId, 1, params.itemId);
+                            insertMassages(result[0].person_id, 1, result[0].offer_id);
                         }
                         res.send({ ans: 2 });
                     })
@@ -190,8 +222,6 @@ function insertValueBackToOffersTable(idOfOffer, stokeQuantity) {
     let sql = `UPDATE offers
     SET Quantity = ${stokeQuantity}
     WHERE offer_id = ${idOfOffer};`
-    console.log("1");
-    console.log("sql offers:", sql);
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
@@ -239,8 +269,6 @@ function insertValueBackToStoke_historyTable(stokeName, ownerName, quantity, ope
                     AND stoke_name = '${stokeName}';`
             }
         }
-        console.log("2");
-        console.log("sql history:", sql);
         con.query(sql, function (err, result) {
             if (err) {
                 console.log(err)
@@ -253,6 +281,28 @@ function insertValueBackToStoke_historyTable(stokeName, ownerName, quantity, ope
 function deleteIfQuantityIsZero() {
     let sql = `DELETE FROM offers 
     WHERE Quantity = 0;`
+    con.query(sql, function (err, result) {
+        if (err) {
+            console.log(err)
+            return (err);
+        }
+    })
+}
+
+function insertMassages(personId, param, reqId) {
+    console.log("insertMassagessssssssssssssssssssssssssssssssssssssss:");
+    let myMassage;
+    switch (param) {
+        case 0:
+            myMassage = (`request ${reqId} is waiting for much...`)
+            break;
+        case 1:
+            myMassage = (`request ${reqId} completed.`)
+            break;
+    }
+    let sql = `INSERT INTO Messages (Message, person_id)
+            VALUES ('${myMassage}', ${personId});`
+            console.log("sqlllllllllll:", sql);
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)

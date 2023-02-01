@@ -7,10 +7,16 @@ function Portfolio(params) {
     const [data, setData] = useState();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myStokes/'${userInfo.myInfo.user_name}'/`)
+        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.user_name}/`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
+            })
+            console.log("userInfo.myInfo.user_name:", userInfo.myInfo);
+        fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.user_name}`)
+            .then((response) => response.json())
+            .then((data) => {
+                console.log(data);
             })
     }, [])
 
@@ -23,8 +29,8 @@ function Portfolio(params) {
         <div id="usersStukes">
             <h1 className='welcome'> my stokes </h1>
             <ol>
-                {data.map((item) => (
-                    <li key={item.stoke_name}>
+                {data.map((item, index) => (
+                    <li key={index}>
                         <div className="myStukes" >
                             <p>
                                 {item.stoke_name} <br />

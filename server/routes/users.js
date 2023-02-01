@@ -35,7 +35,38 @@ router.get(`/myStokes/:userName`, function (req, res) {
   })
 });
 
+router.get(`/myStokes/portfilo/:userName`, function (req, res) {
+  let portfilo = []
+  let sql = `SELECT SUM(Quantity_purchased), stoke_name
+  FROM stoke_history GROUP BY stoke_name 
+  WHERE owner = '${req.params.userName}';`
+  con.query(sql, function (err, result) {
+    if (err) {
+      console.log(err);
+    }
+    else {
+      console.log("resultttttttttt:", result);
+      // console.log("resultttttttttt[0]:", result[0]);
+      // console.log("resultttttttttt:[0].stoke_name", result[0].stoke_name);
+      // res.send(result)
+    }
+  })
+});
 
+router.get(`/masseges/:id`, function (req, res) {
+  console.log("req.params.id:", req.params.id);
+  let sql = `SELECT Message  
+  FROM Messages 
+  WHERE person_id = ${req.params.id}`
+  console.log("sql masseges/:id:", sql);
+  con.query(sql, function (err, result) {
+    if (err) throw err;
+    else {
+      console.log("result masseges", result);
+      res.send(result)
+    }
+  })
+});
 
 
 module.exports = router;

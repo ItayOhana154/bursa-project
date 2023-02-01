@@ -2,3 +2,32 @@ SELECT * FROM offers WHERE type = 0 AND stoke_id = 7 AND price <= ;
 
 
 DELETE FROM offers WHERE stoke_name = NULL;
+
+
+result[0]: RowDataPacket {
+  offer_id: 67,
+  stoke_id: 1,
+  Quantity: 10,
+  price: 1,
+  type: 0,
+  person_id: '2',
+  stoke_name: 'I&B inc'
+}
+result[0].person_id
+result[0].offer_id
+params: {
+  itemPrice: '445',
+  itemQuantity: '12',
+  itemId: 1,
+  type: 1,
+  personId: 2,
+  stoke_name: 'I&B inc',
+  person_name: 'boaz fride'
+}
+
+
+select sum(Quantity_purchased), stoke_name, owner 
+from stoke_history group by owner, stoke_name order by owner;
+
+select sum(Quantity_purchased), stoke_name, owner 
+from stoke_history group by owner, stoke_name order by owner where owner = boaz fride;
