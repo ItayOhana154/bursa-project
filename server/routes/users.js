@@ -26,35 +26,50 @@ router.get('/myInfo/:id', function (req, res) {
 router.get(`/myStokes/:userName`, function (req, res) {
   let sql = `SELECT stoke_name, Quantity_purchased 
   FROM stoke_history 
-  WHERE owner_name = ${req.params.userName}`
-  console.log('sql: ', sql);
+  WHERE owner = '${req.params.userName}'`
   con.query(sql, function (err, result) {
     if (err) throw err;
     else {
-      console.log('req: ', req.params.userName);
-      console.log('resss', result);
       res.send(result)
     }
   })
 });
 
 router.get(`/myStokes/portfilo/:userName`, function (req, res) {
-  let portfilo = []
+  let sum = 0;
   let sql = `SELECT SUM(Quantity_purchased), stoke_name
-  FROM stoke_history GROUP BY stoke_name 
-  WHERE owner = '${req.params.userName}';`
-  con.query(sql, function (err, result) {
+  FROM stoke_history 
+  WHERE owner = '${req.params.userName}'
+  GROUP BY stoke_name;`
+  // console.log("sqllllllllllll portfilo:", sql);
+  con.query(sql, async function (err, result) {
     if (err) {
       console.log(err);
     }
     else {
-      console.log("resultttttttttt:", result);
-      // console.log("resultttttttttt[0]:", result[0]);
-      // console.log("resultttttttttt:[0].stoke_name", result[0].stoke_name);
-      // res.send(result)
+      let dataCheck;
+      let QuaryPromise = (sql) => new Promise((resolve, reject) => {
+        con.query(sql, function (err, price) {
+          if (err) {
+            console.log(err);
+            return;
+          }
+          resolve(price)
+        })
+      })
+      for (let i = 0; i < result.length; i++) {
+        sql = `SELECT stoke_price
+        FROM stokes 
+        WHERE stoke_name = '${result[i].stoke_name}';`
+        const price = await QuaryPromise(sql)
+
+        sum = sum + (price[0].stoke_price * result[i]['SUM(Quantity_purchased)'])
+      }
     }
+    res.send({ ans: sum });
   })
 });
+
 
 router.get(`/masseges/:id`, function (req, res) {
   console.log("req.params.id:", req.params.id);
@@ -72,7 +87,7 @@ router.get(`/masseges/:id`, function (req, res) {
 });
 
 router.get('/getsymbul', function (req, res) {
-  res.sendFile('/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/symbul.png')
+  res.sendFile('/home/hilma/projects/projectWithOhana/bursa-project/server/public/images/symbul.png')
 })
 
 

@@ -7,18 +7,20 @@ function Portfolio(params) {
     console.log('userInfo: ', userInfo)
     const [data, setData] = useState();
     const Navigate = useNavigate()
+    const [TradingPortfolioValue, setTradingPortfolioValue] = useState()
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.user_name}/`)
+        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.username}/`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
             })
             console.log("userInfo.myInfo.user_name:", userInfo.myInfo);
-        fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.user_name}`)
+        fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.username}`)
             .then((response) => response.json())
             .then((data) => {
-                console.log(data);
+                setTradingPortfolioValue(data.ans);
+                console.log("users/myStokes/portfilo:", data);
             })
     }, [])
 
@@ -35,10 +37,10 @@ function Portfolio(params) {
         <div id="usersStukes">
             <header className="appPagesNavigate">
                 <button className="appPagesNavigateBtn" onClick={returnToMainPage}> main page </button>
-                <h1 id='userStokeHeader'> my stokes </h1>
+                <h1 id='userStokeHeader'>Portfolio</h1>
                 <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
             </header>
-
+            <p>Trading portfolio value: {TradingPortfolioValue}$</p>
             {data.map((item, index) => (
                 <div className="myStukes" key={index}>
                     <p>

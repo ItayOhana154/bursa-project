@@ -39,7 +39,7 @@ function Search(params) {
             </form>
             {boolSearch ? <div id="search-place"><p onClick={navigateToStokePage}>{stokeNameToPress}</p></div> : null}
             <button onClick={searchStoke} id="submit-login-btn" type="submit" className="submit-btn">
-                Search!<img src={`client/src/IMG/searchIcon.png`} alt="search-icon" />
+                Search!
             </button>
         </div>
 
