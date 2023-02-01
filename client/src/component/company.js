@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from "react";
 import { Link } from 'react-router-dom'
 import { stokeIdContext } from "./stokeNameContext";
-import { userInfoContext } from "./userInfoContext";
+import { UserInfoContext } from "./userInfoContext";
 import Buy from "./buy";
 import Sell from "./sell";
 
@@ -9,11 +9,11 @@ import Sell from "./sell";
 function Company() {
     const [stoke, setStoke] = useState("")
     const stokeNumId = useContext(stokeIdContext);
-    const userInfo = useContext(userInfoContext);
+    const userInfo = useContext(UserInfoContext);
     const [boolBuy, setBoolBuy] = useState(false)
     const [boolSell, setBoolSell] = useState(false)
 
-
+    const randomNumber = Math.floor(Math.random() * 20) + 1;
 
     useEffect(() => {
         fetch(`http://localhost:8080/spark/main/stoke/${stokeNumId.stokeId}`)
@@ -35,25 +35,28 @@ function Company() {
         setBoolSell(bool);
     }
 
+
     return (
-        <div>
+        <div id="companyInfoDiv">
             <div>
-                <h1 className='welcome'>Company</h1>
-                <p>stoke name - {stoke[0] ? stoke[0].stoke_name : null}</p>
-                <p>stoke Quantity - {stoke[0] ? stoke[0].Quantity : null}</p>
-                <p>stoke available - {stoke[0] ? stoke[0].stoke_available : null}</p>
-                <p>stoke price - {stoke[0] ? stoke[0].stoke_price : null}</p>
+                <h1 className='welcome'>{stoke[0] ? stoke[0].stoke_name : null}</h1>
+                <img src={`http://localhost:8080/spark/getImage?random=${randomNumber}`} alt="stoke chart" />
+                <div id="stukeInfoDiv">
+                    <p>stoke Quantity - {stoke[0] ? stoke[0].Quantity : null}</p>
+                    <p>stoke available - {stoke[0] ? stoke[0].stoke_available : null}</p>
+                    <p>stoke price - {stoke[0] ? stoke[0].stoke_price : null}</p>
+                </div>
             </div>
-            <div>
+            <div className="buyAndSaleBtnDiv" >
                 {boolBuy ? <Buy id={stokeNumId.stokeId}
-                 personId={userInfo.myInfo.id} stokeName={stoke[0].stoke_name}
-                  personName={userInfo.myInfo.user_name} />
+                    personId={userInfo.myInfo.id} stokeName={stoke[0].stoke_name}
+                    personName={userInfo.myInfo.user_name} />
                     : <p></p>}
             </div>
-            <div>
+            <div className="buyAndSaleBtnDiv" >
                 {boolSell ? <Sell id={stokeNumId.stokeId}
-                 personId={userInfo.myInfo.id} stokeName={stoke[0].stoke_name}
-                 personName={userInfo.myInfo.user_name} />
+                    personId={userInfo.myInfo.id} stokeName={stoke[0].stoke_name}
+                    personName={userInfo.myInfo.user_name} />
                     : <p></p>}
             </div>
 

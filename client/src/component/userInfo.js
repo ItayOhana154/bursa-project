@@ -13,23 +13,23 @@ function UserInfo(params) {
             })
     }, [])
 
+    console.log('data: ', data);
     if (!data) {
         return <h1>Loading...</h1>
     }
 
     return (
         <div>
-            <h1 className='welcome'> my info </h1>
             {data.map((item) => (
-                <div key={item.id}>
+                <div id="userInfoDiv" key={item.id}>
+                    <h1 className='welcome'>hello {item.user_name}! </h1><br />
                     <p>
-                        hello {item.user_name}! <br />
                         phone number: 0{item.phone_num} <br />
                         email: {item.email} <br />
                         <br />
                         <br />
-                        payment method: <br />
-                        credit card number: {item.creditCard_number} <br />
+                        payment method: Credit Card <br />
+                        credit card number: {item.creditCard_num} <br />
                         bank number: {item.bank_num} <br />
                     </p>
                 </div>

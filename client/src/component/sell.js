@@ -15,19 +15,19 @@ function Sell(props) {
             body: JSON.stringify({
                 itemPrice: price, itemQuantity: quantity,
                 itemId: props.id, type: 0,
-                 personId: props.personId, stoke_name: props.stokeName,
-                 person_name: props.personName
+                personId: props.personId, stoke_name: props.stokeName,
+                person_name: props.personName
             }),
         })
             .then((response) => response.json())
-            .then((data) => {
-                // console.log("data:", data);
-            })
+            // .then((data) => {
+            //     // console.log("data:", data);
+            // })
     }
 
     return (
-        <div>
-            <h1 className='welcome'>Sell</h1>
+        <div className="salesDivs">
+            <h2 className='welcome'>Sell</h2>
             <form name="buying-form" id="buying" className="input-group" >
                 <input onChange={(ev) => setQuantity(ev.target.value)} name="password" type="number"
                     className="input-field" placeholder="Enter quantity" value={quantity} required />

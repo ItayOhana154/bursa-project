@@ -46,7 +46,7 @@ function queryForBuyOrSell(params) {
     let sql = `INSERT INTO offers ( price, Quantity, stoke_id, type, person_id, stoke_name)  
     VALUES (${params.itemPrice}, ${params.itemQuantity},
         ${params.itemId}, ${params.type},
-         ${params.personId}, '${params.stoke_name}')`
+        ${params.personId}, '${params.stoke_name}')`
     con.query(sql, function (err, result) {
         if (err) {
             console.log(err)
@@ -57,6 +57,11 @@ function queryForBuyOrSell(params) {
     })
 }
 
+router.get('/getImage', function (req, res) {
+    const { random } = req.query;
+    res.sendFile(`/home/hilma/Desktop/mainProjects/bursa-project/server/public/images/stuke${random}.png`)
+})
+
 
 
 // get into offers tables and check if any offer match:
@@ -64,8 +69,7 @@ function checkForMatch(params) {
     let stokesToSeller;
     let stokesToBuyer;
     let sql;
-    // console.log("params.type:", params.type);
-    // selling:
+    
     if (params.type === 0) {
         sql = `SELECT * FROM offers
         WHERE type = 1 

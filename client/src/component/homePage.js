@@ -15,11 +15,12 @@ function HomePage(params) {
     }, [myInfo]);
 
     return (
-        <div>
+        <div id="homePageDiv">
             <h1 className='welcome'>home page</h1>
-            <Link className='btn' to="/login">login</Link>
-            <br />
-            <Link className='btn' to="/register">register</Link>
+            <div id="homePageBtnDiv">
+                <button className="homePageBtn"><Link id="LoginBtn" className='btnLink' to="/login">login</Link></button>
+                <button className="homePageBtn"><Link className='btnLink' to="/register">register</Link></button>
+            </div>
         </div>
     )
 }

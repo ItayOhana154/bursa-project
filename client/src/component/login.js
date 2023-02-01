@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { useNavigate } from "react-router-dom";
 import { UserInfoContext } from "./userInfoContext";
 
@@ -9,17 +9,11 @@ function Login() {
     const [userName, setUserName] = useState("");
     const [password, setPassword] = useState("");
     const userInfo = useContext(UserInfoContext);
-    
-
 
     function checkUser(bool, info) {
 
         if (bool) {
-            userInfo.changeInfo(info[0].id, info[0].user_name);
-            // setTimeout(() => {
-            //     navigate("/bursa/main");
-            //     // window.location.reload();}
-            // }, 2000);
+            userInfo.changeInfo(info[0].id, info[0].user_name);;
             return;
         }
         alert("your username or password is incorrect");
@@ -30,14 +24,10 @@ function Login() {
         date.setTime(date.getTime() + (24 * 60 * 60 * 1000));
         var expires = "expires=" + date.toUTCString();
         document.cookie = `id=${id}; expires=${expires}; path=http://localhost:3000;`
-        // setTimeout(function () {
-            navigate("/bursa/main");
-        //     window.location.reload();
-        // }, 1000);
+        navigate("/bursa/main");
     }
 
     function handleSubmit() {
-        // event.preventDefault();
         fetch(`http://localhost:8080/sparkLog/login`, {
             method: 'POST',
             headers: {
@@ -57,12 +47,14 @@ function Login() {
     return (
         <div>
             <h1>login</h1>
-            <form name="login-form" id="login" className="input-group" >
-                <input onChange={(ev) => setUserName(ev.target.value)} name="user-id" type="text"
-                    className="input-field" placeholder="Username" value={userName} required />
-                <input onChange={(ev) => setPassword(ev.target.value)} name="password" type="password"
-                    className="input-field" placeholder="Enter Password" value={password} required />
-            </form>
+            <div id='loginFormDiv'>
+                <form name="login-form" id="login" className="input-group" >
+                    <input onChange={(ev) => setUserName(ev.target.value)} name="user-id" type="text"
+                        className="input-field" placeholder="Username" value={userName} required />
+                    <input onChange={(ev) => setPassword(ev.target.value)} name="password" type="password"
+                        className="input-field" placeholder="Enter Password" value={password} required />
+                </form>
+            </div>
             <button onClick={handleSubmit} id="submit-login-btn" type="submit" className="submit-btn">
                 Log in
             </button>
