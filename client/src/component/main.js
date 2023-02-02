@@ -33,7 +33,6 @@ function Main() {
         <div id="mainPageDiv">
             <div id="navDiv">
                 <nav>
-
                     <ul>
                         <li><img id="NavSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" /></li>
                         <li><Link className='btn' to="/bursa/main/userInfo">Personal info</Link> </li>
@@ -48,6 +47,7 @@ function Main() {
                         <h1 className='welcome'>Tel Aviv Stock Exchange</h1>
                         <Search />
                     </header>
+                    {/* <h1 className='welcome'> Tel Aviv Stock Exchange </h1> */}
                 </div>
                 <div id="mainPageStokesDiv" >
                     {stokesArr.map((item, index) => {

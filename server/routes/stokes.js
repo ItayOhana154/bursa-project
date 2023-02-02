@@ -3,7 +3,6 @@ var router = express.Router();
 var con = require('../connection');
 
 router.get('/main', function (req, res) {
-    console.log("req.body:", req.body);
     let sql = `SELECT * FROM stokes`
     con.query(sql, function (err, result) {
         if (err) {
@@ -53,7 +52,6 @@ router.get('/getImage', function (req, res) {
 // Set buy offer function:
 router.post('/buy', function (req, res) {
     queryForBuyOrSell(req.body, res)
-    console.log("req.body:", req.body);
 });
 // Set sell offer function:
 router.post('/sell', function (req, res) {
@@ -86,7 +84,6 @@ function checkForMatch(params, res) {
     let sql;
     // selling
     if (params.type === 0) {
-        console.log("paramsssssssss:", params);
         sql = `SELECT * FROM offers
         WHERE type = 1 
         AND stoke_id = ${params.itemId} 
@@ -96,7 +93,6 @@ function checkForMatch(params, res) {
             if (err) {
                 res.send({ ans: 0 });
             } else {
-                console.log(result[0]);
                 if (result.length === 0) {
                     // everything is ok but there is no much
                     res.send({ ans: 1 });

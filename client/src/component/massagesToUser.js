@@ -15,15 +15,15 @@ function MassagesToUser(props) {
                 setMassages(massagesData)
             })
     }, [])
-   
+
     return (
         <div>
             <h3>Massages:</h3>
             {console.log("massages:", massages)}
             <ul>
                 {massages ? massages.map((item, index) => {
-                    return<li key={index}>{item.Message}</li>
-                }) : null}
+                    return <li key={index}>{item.Message}</li>
+                }) : <p>you have no massegase</p>}
             </ul>
         </div>
     )

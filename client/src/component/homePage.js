@@ -16,7 +16,7 @@ function HomePage(params) {
 
     return (
         <div id="homePageDiv">
-            <h1 className='welcome'>home page</h1>
+            <h1 className='welcome'>Tel Aviv Stock Exchange</h1>
             <div id="homePageBtnDiv">
                 <button className="homePageBtn"><Link id="LoginBtn" className='btnLink' to="/login">login</Link></button>
                 <button className="homePageBtn"><Link className='btnLink' to="/register">register</Link></button>
