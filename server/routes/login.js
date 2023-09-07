@@ -10,7 +10,7 @@ router.post('/login', function (req, res) {
     ON users.id = passwords.id
     WHERE users.user_name = '${req.body.username}'
     AND passwords.password = '${req.body.password}'`
-    
+
     con.query(sql, function (err, user) {
         console.log("user:", user);
         if (err) {

@@ -10,13 +10,13 @@ function Portfolio(params) {
     const [TradingPortfolioValue, setTradingPortfolioValue] = useState()
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myStokes/${userInfo.myInfo.username}/`)
+        fetch(`http://localhost:8081/users/myStokes/${userInfo.myInfo.username}/`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
             })
             console.log("userInfo.myInfo.user_name:", userInfo.myInfo);
-        fetch(`http://localhost:8080/users/myStokes/portfilo/${userInfo.myInfo.username}`)
+        fetch(`http://localhost:8081/users/myStokes/portfilo/${userInfo.myInfo.username}`)
             .then((response) => response.json())
             .then((data) => {
                 setTradingPortfolioValue(data.ans);
@@ -38,7 +38,7 @@ function Portfolio(params) {
             <header className="appPagesNavigate">
                 <button className="appPagesNavigateBtn" onClick={returnToMainPage}> main page </button>
                 <h1 id='userStokeHeader'>Portfolio</h1>
-                <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
+                <img className="headerSymbul" src={`http://localhost:8081/users/getsymbul`} alt="company symbul" />
             </header>
             <p>Trading portfolio value: {TradingPortfolioValue}$</p>
             {data.map((item, index) => (

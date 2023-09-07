@@ -7,7 +7,7 @@ function MassagesToUser(props) {
     useEffect(() => {
         let massagesData = [...massages]
         console.log("props.personId:", props.personId);
-        fetch(`http://localhost:8080/users/masseges/${props.personId}`)
+        fetch(`http://localhost:8081/users/masseges/${props.personId}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log("dataaaaa:", data);

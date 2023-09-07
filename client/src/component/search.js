@@ -13,7 +13,7 @@ function Search(params) {
     const [stokeNameToPress, setStokeNameToPress] = useState("");
 
     function searchStoke() {
-        fetch(`http://localhost:8080/spark//main/stoke/search/${stokeName}`)
+        fetch(`http://localhost:8081/spark//main/stoke/search/${stokeName}`)
             .then((response) => response.json())
             .then((data) => {
                 console.log("data.lengthhhhh :", data.length);

@@ -17,7 +17,7 @@ function Company() {
     const randomNumber = Math.floor(Math.random() * 20) + 1;
 
     useEffect(() => {
-        fetch(`http://localhost:8080/spark/main/stoke/${stokeNumId.stokeId}`)
+        fetch(`http://localhost:8081/spark/main/stoke/${stokeNumId.stokeId}`)
             .then((response) => response.json())
             .then((data) => {
                 setStoke(data)
@@ -48,9 +48,9 @@ function Company() {
                     <div>
                         <h1 className='welcome'>{stoke[0] ? stoke[0].stoke_name : null}</h1>
                     </div>
-                    <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
+                    <img className="headerSymbul" src={`http://localhost:8081/users/getsymbul`} alt="company symbul" />
                 </header>
-                <img src={`http://localhost:8080/spark/getImage?random=${randomNumber}`} alt="stoke chart" />
+                <img src={`http://localhost:8081/spark/getImage?random=${randomNumber}`} alt="stoke chart" />
                 <div id="stukeInfoDiv">
                     <p>stoke Quantity - {stoke[0] ? stoke[0].Quantity : null}</p>
                     <p>stoke available - {stoke[0] ? stoke[0].stoke_available : null}</p>

@@ -8,7 +8,7 @@ function Buy(props) {
 
     function buyStokes() {
         console.log("props.personName:", props.personName);
-        fetch(`http://localhost:8080/spark/buy`, {
+        fetch(`http://localhost:8081/spark/buy`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

@@ -31,7 +31,7 @@ function Register() {
     function handleSubmit() {
         console.log("username: userName, password: password:", userName, password);
         // event.preventDefault();
-        fetch(`http://localhost:8080/sparkReg/register`, {
+        fetch(`http://localhost:8081/sparkReg/register`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

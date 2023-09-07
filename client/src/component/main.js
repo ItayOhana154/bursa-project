@@ -11,7 +11,7 @@ function Main() {
     const stokeNumId = useContext(stokeIdContext);
 
     useEffect(() => {
-        fetch(`http://localhost:8080/spark/main`)
+        fetch(`http://localhost:8081/spark/main`)
             .then((response) => response.json())
             .then((data) => {
                 setStokesArr(data)
@@ -34,7 +34,7 @@ function Main() {
             <div id="navDiv">
                 <nav>
                     <ul>
-                        <li><img id="NavSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" /></li>
+                        <li><img id="NavSymbul" src={`http://localhost:8081/users/getsymbul`} alt="company symbul" /></li>
                         <li><Link className='btn' to="/bursa/main/userInfo">Personal info</Link> </li>
                         <li><Link className='btn' to="/bursa/main/portfolio">Personal trading portfolio</Link> </li>
                     </ul>

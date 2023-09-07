@@ -11,7 +11,7 @@ function UserInfo() {
     const Navigate = useNavigate();
 
     useEffect(() => {
-        fetch(`http://localhost:8080/users/myInfo/${userInfo.myInfo.id}`)
+        fetch(`http://localhost:8081/users/myInfo/${userInfo.myInfo.id}`)
             .then((response) => response.json())
             .then((data) => {
                 setData(data);
@@ -38,7 +38,7 @@ function UserInfo() {
                     <header className="appPagesNavigate">
                         <button className="appPagesNavigateBtn" onClick={returnToMainPage}> main page </button>
                         <h1 className='welcome' id="userInfoH1">hello {item.user_name}! </h1>
-                        <img className="headerSymbul" src={`http://localhost:8080/users/getsymbul`} alt="company symbul" />
+                        <img className="headerSymbul" src={`http://localhost:8081/users/getsymbul`} alt="company symbul" />
                     </header>
                     <p id="userInfoP">
                         phone number: 0{item.phone_num} <br />

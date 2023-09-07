@@ -7,7 +7,7 @@ function Sell(props) {
     const [quantity, setQuantity] = useState()
 
     function buyStokes() {
-        fetch(`http://localhost:8080/spark/sell`, {
+        fetch(`http://localhost:8081/spark/sell`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

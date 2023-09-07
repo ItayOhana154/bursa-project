@@ -29,7 +29,7 @@ function Login() {
     }
 
     function handleSubmit() {
-        fetch(`http://localhost:8080/sparkLog/login`, {
+        fetch(`http://localhost:8081/sparkLog/login`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
